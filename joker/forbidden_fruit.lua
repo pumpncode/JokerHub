@@ -9,7 +9,11 @@ SMODS.Joker {
 	},
 	rarity = 3,
 	loc_vars = function(self, info_queue, card)
-		return {vars = {card.ability.extra.x_mult, card.ability.extra.scaling, localize(card.ability.extra.rank, "ranks")}}
+		local key = ''
+		for k, v in pairs(SMODS.Ranks) do
+			if v.id == card.ability.extra.rank then key = v.key end
+		end
+		return {vars = {card.ability.extra.x_mult, card.ability.extra.scaling, localize(key, "ranks")}}
 	end,
 	atlas = "atlas_jokers",
 	pos = { x = 0, y = 0 },

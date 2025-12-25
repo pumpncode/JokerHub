@@ -4,7 +4,7 @@
  Requires [Steamodded](https://github.com/Steamodded/smods) and [Lovely](https://github.com/ethangreen-dev/lovely-injector)
 
 ## Current Additions
-- 15 new Jokers
+- 22 new Jokers
     - 5 Commons
     - 9 Uncommons
     - 5 Rares

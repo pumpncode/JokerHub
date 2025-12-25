@@ -55,6 +55,7 @@ SMODS.Joker {
 									poker_hands = context.poker_hands,
 									is_hudson_copy = true,
 									repetition = true,
+									blueprint = context.blueprint,
 									card_effects = { eval_card(held_card, context) } -- this is the table of effects that has been calculated
 								}
 								local joker_ret = G.jokers.cards[joker_i]:calculate_joker(fake_context)
@@ -68,7 +69,7 @@ SMODS.Joker {
 						
 						for trigger = 1, #retriggers do
 							local fake_context = context
-							fake_context.blueprint = 1
+						    fake_context.blueprint = 1
 							--fake_context.blueprint_card = card
 							local other_joker_ret = other_joker:calculate_joker(fake_context)
 							if other_joker_ret then
@@ -110,6 +111,7 @@ SMODS.Joker {
 		end
 	end,
 	update = function(self, card, dt)
+
 		if G.STAGE == G.STAGES.RUN then
 			local other_joker = nil
 			for i = 1, #G.jokers.cards do

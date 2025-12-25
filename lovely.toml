@@ -18,33 +18,6 @@ match_indent = true
 times = 1
 
 # -----------------------------------
-# Orb of Confusion
-# -----------------------------------
-[[patches]]
-[patches.pattern]
-target = "blind.lua"
-pattern = "self.triggered = nil"
-position = "after"
-payload = '''
-self.confusion = false
-'''
-match_indent = true
-times = 1
-
-[[patches]]
-[patches.pattern]
-target = "blind.lua"
-pattern = "function Blind:stay_flipped(area, card)"
-position = "after"
-payload = '''
-if self.confusion and ((G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0) or next(SMODS.find_card('j_paperback_the_world'))) then
-	return true
-end
-'''
-match_indent = true
-times = 1
-
-# -----------------------------------
 # Going Viral
 # -----------------------------------
 [[patches]]
@@ -95,14 +68,15 @@ payload = '''
 else
 local brokers = SMODS.find_card("j_jokerhub_broker")
 for i = 1, #brokers do
-	local chips_to_add = G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)*brokers[i].ability.extra.scaling
-	brokers[i].ability.extra.chips = brokers[i].ability.extra.chips + chips_to_add
-	if next(SMODS.find_mod("Maximus")) then SMODS.calculate_context({scaling_card = true}) end
-	SMODS.calculate_effect({
-		message = localize('k_upgrade_ex'),
-		colour = G.C.CHIPS,
-		card = brokers[i]
-	}, brokers[i])
+	SMODS.scale_card(brokers[i], {
+		ref_table = brokers[i].ability.extra,
+		ref_value = "chips",
+		scalar_value = "scaling",
+		message_colour = G.C.CHIPS,
+		operation = function(ref_table, ref_value, initial, change)
+			ref_table[ref_value] = initial + G.GAME.interest_amount*math.min(math.floor(G.GAME.dollars/5), G.GAME.interest_cap/5)*change
+		end
+	})
 end
 end
 '''
@@ -245,17 +219,6 @@ times = 1
 # -----------------------------------
 # Amamiya
 # -----------------------------------
-
-[[patches]]
-[patches.pattern]
-target = "functions/state_events.lua"
-pattern = '''for _, v in ipairs(SMODS.get_card_areas('playing_cards')) do'''
-position = "before"
-payload = '''
-SMODS.calculate_context({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, jh_scoring_before = true})
-'''
-match_indent = true
-times = 1
 
 [[patches]]
 [patches.pattern]

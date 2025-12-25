@@ -453,7 +453,7 @@ return {
             stake_jokerhub_pink = {
                 name = "Pink Stake",
                 text = {
-                    "{C:attention}Showdown boss{} and end of game",
+                    "{C:attention}Finisher blind{} and end of run",
                     "is on {C:attention}Ante 9{}.",
                     "{s:0.8}Applies Purple Stake and below"
                 },

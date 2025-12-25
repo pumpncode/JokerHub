@@ -25,22 +25,23 @@ SMODS.Joker {
 			if context.cardarea == G.jokers and context.before and not (context.individual or context.repetition) and not context.blueprint then
 				if card.ability.extra.hand_type then
 					if context.scoring_name == card.ability.extra.hand_type then
-						card.ability.extra.mult = card:scale_value(card.ability.extra.mult, card.ability.extra.scaling)
 						card.ability.extra.hand_type = nil
-						return {
-						  message = localize('k_upgrade_ex'),
-						  colour = G.C.MULT,
-						  card = card
-						}
+						SMODS.scale_card(card, {
+							ref_table = card.ability.extra,
+							ref_value = "mult",
+							scalar_value = "scaling",
+						})
 					else
 						card.ability.extra.hand_type = nil
 						if card.ability.extra.mult > 0 then
-							card.ability.extra.mult = card.ability.extra.mult - card.ability.extra.inverse_scaling * (G.GAME.soil_mod or 1)
-							return {
-								message = localize{type='variable',key='a_mult_minus',vars={card.ability.extra.inverse_scaling}},
-								colour = G.C.RED,
-								card = card
-							}
+							SMODS.scale_card(card, {
+								ref_table = card.ability.extra,
+								ref_value = "mult",
+								scalar_value = "inverse_scaling",
+								operation = '-',
+								message_key = 'a_mult_minus',
+								message_color = G.C.RED
+							})
 						end
 					end
 				else

@@ -4,13 +4,12 @@ function Card.remove(self)
 		for k, v in ipairs(G.jokers.cards) do
 			if v.config.center_key == 'j_jokerhub_gambit' then
 				if JHUB.is_food(self) then
-					v.ability.extra.x_mult = v.ability.extra.x_mult + v.ability.extra.scaling
-					if next(SMODS.find_mod("Maximus")) then SMODS.calculate_context({scaling_card = true}) end
-					SMODS.calculate_effect({
-						message = localize('k_upgrade_ex'),
-						colour = G.C.MULT,
-						card = v
-					}, v)
+					SMODS.scale_card(v, {
+						ref_table = v.ability.extra, -- the table that has the value you are changing in
+						ref_value = "x_mult", -- the key to the value in the ref_table
+						scalar_value = "scaling", -- the key to the value to scale by, in the ref_table by default
+						message_key = 'a_xmult'
+					})
 				end
 			end
 		end

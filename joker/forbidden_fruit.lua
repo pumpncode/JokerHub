@@ -9,7 +9,11 @@ SMODS.Joker {
 	},
 	rarity = 3,
 	loc_vars = function(self, info_queue, card)
-		return {vars = {card.ability.extra.x_mult, card.ability.extra.scaling, localize(card.ability.extra.rank, "ranks")}}
+		local key = ''
+		for k, v in pairs(SMODS.Ranks) do
+			if v.id == card.ability.extra.rank then key = v.key end
+		end
+		return {vars = {card.ability.extra.x_mult, card.ability.extra.scaling, localize(key, "ranks")}}
 	end,
 	atlas = "atlas_jokers",
 	pos = { x = 0, y = 0 },
@@ -63,13 +67,12 @@ SMODS.Joker {
 						--card = card
 					}
 				else
-					card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.scaling
-					if next(SMODS.find_mod("Maximus")) then SMODS.calculate_context({scaling_card = true}) end
-					return {
-					  message = localize('k_upgrade_ex'),
-					  colour = G.C.MULT,
-					  card = card
-					}
+					SMODS.scale_card(card, {
+						ref_table = card.ability.extra, -- the table that has the value you are changing in
+						ref_value = "x_mult", -- the key to the value in the ref_table
+						scalar_value = "scaling", -- the key to the value to scale by, in the ref_table by default
+						message_key = 'a_xmult'
+					})
 				end
 			end
 			

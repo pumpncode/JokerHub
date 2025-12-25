@@ -91,7 +91,7 @@ function JHUB.get_amamiya_effect(card, context, boss_key, vars)
 			end
 		end
 	elseif boss_key == "bl_flint" then --The Flint
-		if not card.debuff and context.cardarea == G.jokers and context.jh_scoring_before then
+		if not card.debuff and context.cardarea == G.jokers and context.initial_scoring_step then
 			return {
 				x_chips = vars.x_chips,
 				x_mult = vars.x_mult,
@@ -139,11 +139,13 @@ function JHUB.get_amamiya_effect(card, context, boss_key, vars)
 			}
 		end
 	elseif boss_key == "bl_eye" then --The Eye
-		if not card.debuff and context.joker_main and not G.GAME.hands[context.scoring_name] or G.GAME.hands[context.scoring_name].played_this_round < 1 then
-			return {
-				message = localize{type='variable',key='a_xmult',vars={vars.x_mult}},
-				Xmult_mod = vars.x_mult,
-			}
+		if not card.debuff and context.joker_main then
+			if G.GAME.hands[context.scoring_name] or G.GAME.hands[context.scoring_name].played_this_round < 1 then
+				return {
+					message = localize{type='variable',key='a_xmult',vars={vars.x_mult}},
+					Xmult_mod = vars.x_mult,
+				}
+			end
 		end
 	elseif boss_key == "bl_final_heart" then --Crimson Heart
 		if (context.add_to_deck and not card.ability.extra.crimson_card) or (context.cardarea == G.jokers and context.after and not card.debuff) then
@@ -194,7 +196,7 @@ function JHUB.get_amamiya_effect(card, context, boss_key, vars)
                 card.ability.jh_initial_hand = true
             end
 		end
-		if not card.debuff and context.individual and context.cardarea == G.hand then
+		if not card.debuff and context.individual and context.cardarea == G.hand and not context.end_of_round then
 			if context.other_card.ability.jh_initial_hand and not context.other_card.debuff then
 				return {
 					x_mult = vars.x_mult,

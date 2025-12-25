@@ -19,11 +19,12 @@ SMODS.Joker {
 	perishable_compat = true,
 	calculate = function(self, card, context)
 		if not card.debuff then
+			--[[
 			if context.setting_blind then
 				G.GAME.blind.confusion = true
 			end
 			
-			if context.before --[[and context.cardarea == G.jokers]] then
+			if context.before then
 				if G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
 					for i = 1, #context.full_hand do
 						if context.full_hand[i].facing == 'back' then
@@ -32,7 +33,13 @@ SMODS.Joker {
 					end
 				end
 			end
-			
+			]]
+			if context.stay_flipped and G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
+				if context.from_area == G.deck and context.to_area == G.hand then
+					return  {stay_flipped = true }
+				end
+			end
+
 			--Scoring
 			if context.joker_main then
 				return {
